@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  color-scheme: dark;
+  --canvas: #0a0a0c;
+  --surface: #111114;
+  --raised: #17171b;
+  --line: rgb(255 255 255 / 0.07);
+}
+
+@theme inline {
+  --font-sans: var(--font-open-sans), system-ui, sans-serif;
+  --font-mono: var(--font-open-sans), system-ui, sans-serif;
+  --font-serif: var(--font-open-sans), system-ui, sans-serif;
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-raised: var(--raised);
+  --color-line: var(--line);
+}
+
+body {
+  background: var(--canvas);
+  color: #e4e4e7;
+  font-family: var(--font-open-sans), system-ui, sans-serif;
+  font-feature-settings: "tnum" 0;
+}
+
+::selection {
+  background: rgb(255 255 255 / 0.18);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid rgb(244 244 245 / 0.85);
+  outline-offset: 1px;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgb(255 255 255 / 0.14) transparent;
+}
+
+select option {
+  background: var(--raised);
+  color: #e4e4e7;
+}
