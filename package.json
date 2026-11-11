@@ -1,0 +1,17 @@
+{
+  "name": "musicranker",
+  "version": "0.1.0",
+  "private": true,
+  "workspaces": [
+    "frontend"
+  ],
+  "scripts": {
+    "build": "npm run build --workspace=frontend",
+    "start": "npm run start --workspace=frontend",
+    "dev": "npm run dev --workspace=frontend",
+    "lint": "npm run lint --workspace=frontend"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

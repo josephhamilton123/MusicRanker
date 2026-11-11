@@ -26,7 +26,7 @@ import {
   Trash2,
   Upload,
 } from "lucide-react";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { api } from "@/lib/api";
 import { formatDuration, parseDuration } from "@/lib/format";
@@ -973,7 +973,7 @@ function ScoreFieldCell({
       </button>
       {open ? (
         <ScoreSliderPopover
-          anchor={buttonRef.current}
+          anchorRef={buttonRef}
           label={SCORE_LABELS[field]}
           title={track.title}
           value={score}
@@ -986,14 +986,14 @@ function ScoreFieldCell({
 }
 
 function ScoreSliderPopover({
-  anchor,
+  anchorRef,
   label,
   title,
   value,
   onChange,
   onClose,
 }: {
-  anchor: HTMLElement | null;
+  anchorRef: React.RefObject<HTMLElement | null>;
   label: string;
   title: string;
   value: number | null;
@@ -1007,9 +1007,12 @@ function ScoreSliderPopover({
   const saved = useRef<number | null>(value);
   const dragging = useRef(false);
   const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
 
-  function publish(next: number | null) {
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  }, [onChange]);
+
+  const publish = useCallback((next: number | null) => {
     latest.current = next;
     setDraft(next);
     if (saved.current === next) {
@@ -1017,18 +1020,22 @@ function ScoreSliderPopover({
     }
     saved.current = next;
     onChangeRef.current(next);
-  }
+  }, []);
 
-  function close(save: boolean) {
-    dragging.current = false;
-    if (save) {
-      publish(latest.current);
-    }
-    onClose();
-  }
+  const close = useCallback(
+    (save: boolean) => {
+      dragging.current = false;
+      if (save) {
+        publish(latest.current);
+      }
+      onClose();
+    },
+    [onClose, publish],
+  );
 
   useLayoutEffect(() => {
     function place() {
+      const anchor = anchorRef.current;
       if (!anchor) {
         return;
       }
@@ -1050,7 +1057,7 @@ function ScoreSliderPopover({
       window.removeEventListener("resize", place);
       window.removeEventListener("scroll", place, true);
     };
-  }, [anchor]);
+  }, [anchorRef]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -1060,7 +1067,7 @@ function ScoreSliderPopover({
     }
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
+  }, [close]);
 
   function preview(next: number | null) {
     latest.current = next;

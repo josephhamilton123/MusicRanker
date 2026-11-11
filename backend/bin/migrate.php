@@ -62,6 +62,8 @@ $statements = [
         singing_score TINYINT NULL,
         subjective_score TINYINT NULL,
         notes TEXT NULL,
+        spotify_id VARCHAR(64) NULL,
+        spotify_url VARCHAR(512) NULL,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
         CONSTRAINT fk_tracks_album FOREIGN KEY (album_id) REFERENCES albums(id) ON DELETE CASCADE,
@@ -72,6 +74,11 @@ $statements = [
 
 foreach ($statements as $statement) {
     $pdo->exec($statement);
+}
+
+$columns = $pdo->query("SHOW COLUMNS FROM tracks LIKE 'spotify_id'")->fetchAll();
+if (empty($columns)) {
+    $pdo->exec('ALTER TABLE tracks ADD COLUMN spotify_id VARCHAR(64) NULL, ADD COLUMN spotify_url VARCHAR(512) NULL');
 }
 
 seed($pdo);
