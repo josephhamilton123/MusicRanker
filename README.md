@@ -23,6 +23,8 @@ npm run dev
 
 Open http://localhost:3000. The API listens on http://127.0.0.1:8080.
 
+The browser talks only to the Next.js app. The app forwards `/api` requests to `API_URL`, which defaults to `http://127.0.0.1:8080`. On Coolify, set `API_URL` on the frontend service to the PHP API's address. That value is read when a request arrives, so changing it does not require a new frontend build.
+
 Copy `backend/.env.example` to `backend/.env` and set the MySQL account there. That file is not committed.
 
 If `php bin/migrate.php` reports access denied, the account can sign in but cannot create the `musicranker` database. An administrator needs to run:
