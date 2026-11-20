@@ -21,9 +21,9 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:3000. The API listens on http://127.0.0.1:8080.
+Open http://localhost:3000. The API listens on port 8080.
 
-The browser talks only to the Next.js app. The app forwards `/api` requests to `API_URL`, which defaults to `http://127.0.0.1:8080`. On Coolify, set `API_URL` on the frontend service to the PHP API's address. That value is read when a request arrives, so changing it does not require a new frontend build.
+The browser talks only to the Next.js app. The app forwards `/api` requests to `API_URL`, which defaults to `http://127.0.0.1:8080`. On Coolify, deploy the API from the `backend` directory and set `API_URL` on the frontend service to that service's address, such as `http://<api-service>:8080`. The API listens on `0.0.0.0` and Coolify's `PORT`, so other containers can reach it. `API_URL` is read when a request arrives.
 
 Copy `backend/.env.example` to `backend/.env` and set the MySQL account there. That file is not committed.
 
